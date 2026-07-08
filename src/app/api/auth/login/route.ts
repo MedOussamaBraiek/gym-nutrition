@@ -23,6 +23,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, token: "admin-authenticated" });
   } catch (e) {
-    return NextResponse.json({ error: "Erreur de connexion" }, { status: 500 });
+    console.error("POST /api/auth/login error:", e);
+    const message = e instanceof Error ? e.message : "Erreur de connexion";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

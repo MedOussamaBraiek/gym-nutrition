@@ -26,22 +26,34 @@ const defaults: SiteSettings = {
 
 let cache: SiteSettings | null = null;
 let promise: Promise<SiteSettings> | null = null;
+let cachedError: string | null = null;
 
 export function useSettings() {
   const [settings, setSettings] = useState<SiteSettings>(cache || defaults);
   const [loading, setLoading] = useState(!cache);
+  const [error, setError] = useState<string | null>(cachedError);
 
   useEffect(() => {
     if (cache) { setSettings(cache); setLoading(false); return; }
+    if (cachedError) { setError(cachedError); setLoading(false); return; }
     if (!promise) {
-      promise = fetch("/api/site-settings").then((r) => r.json()).then((d) => {
+      promise = fetch("/api/site-settings").then(async (res) => {
+        if (!res.ok) throw new Error("Erreur de chargement");
+        return res.json();
+      }).then((d) => {
         const merged = { ...defaults, ...d };
         cache = merged;
         return merged;
+      }).catch((err) => {
+        cachedError = err.message;
+        throw err;
       });
     }
-    promise.then(setSettings).then(() => setLoading(false));
+    promise.then(setSettings).then(() => setLoading(false)).catch((err) => {
+      setError(err.message);
+      setLoading(false);
+    });
   }, []);
 
-  return { settings, loading };
+  return { settings, loading, error };
 }

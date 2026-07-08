@@ -16,10 +16,15 @@ global.mongooseCache = cached;
 
 export async function connectDB() {
   if (cached.conn) return cached.conn;
-  if (!MONGODB_URI) throw new Error("MONGODB_URI is not defined in .env.local");
+  if (!MONGODB_URI) throw new Error("MONGODB_URI is not defined");
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI);
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 30000,
+      retryWrites: true,
+      w: "majority",
+    });
   }
   cached.conn = await cached.promise;
   return cached.conn;
