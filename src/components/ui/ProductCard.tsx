@@ -66,11 +66,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         )}
 
-        {!product.inStock && (
-          <div className="absolute inset-0 z-10 bg-black/60 flex items-center justify-center">
-            <span className="bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold">Rupture de stock</span>
-          </div>
-        )}
+        {(() => {
+          const s = product.stock;
+          const inStock = s !== undefined ? s > 0 : product.inStock;
+          return !inStock ? (
+            <div className="absolute inset-0 z-10 bg-black/60 flex items-center justify-center">
+              <span className="bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold">Rupture de stock</span>
+            </div>
+          ) : null;
+        })()}
       </div>
 
       <div className="p-4 sm:p-5">
@@ -102,7 +106,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           <button
             onClick={handleAddToCart}
-            disabled={!product.inStock}
+            disabled={(() => { const s = product.stock; const inStock = s !== undefined ? s > 0 : product.inStock; return !inStock; })()}
             className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
             title="Ajouter au panier"
           >

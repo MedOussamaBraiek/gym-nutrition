@@ -90,14 +90,19 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Catégories</h3>
             <ul className="space-y-3">
-              {["Protéines", "Créatine", "Gainers", "Pré-Workout", "Vitamines"].map(
-                (cat) => (
-                  <li key={cat}>
+              {[
+                { name: "Protéines", slug: "proteines" },
+                { name: "Créatine", slug: "creatine" },
+                { name: "Gainers", slug: "gainers" },
+                { name: "Pré-Workout", slug: "pre-workout" },
+                { name: "Vitamines", slug: "vitamines" },
+              ].map((cat) => (
+                  <li key={cat.slug}>
                     <Link
-                      href={`/products?category=${cat.toLowerCase()}`}
+                      href={`/products?category=${cat.slug}`}
                       className="text-sm text-white/40 hover:text-primary transition-colors"
                     >
-                      {cat}
+                      {cat.name}
                     </Link>
                   </li>
                 )

@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
   flavor: String,
   weight: { type: String, default: "" },
   inStock: { type: Boolean, default: true },
+  stock: { type: Number, default: 0 },
   badge: { type: String, enum: ["new", "sale", "best-seller"] },
   createdAt: { type: Date, default: Date.now },
 });

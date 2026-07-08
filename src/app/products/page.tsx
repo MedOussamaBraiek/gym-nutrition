@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, X, ChevronDown } from "lucide-react";
 import { categories, brands, goals } from "@/lib/products";
@@ -62,10 +63,18 @@ function FilterGroup({ title, items, selected, onChange }: FilterGroupProps) {
   );
 }
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const { products } = useProducts();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const cat = searchParams?.get("category");
+    if (cat) {
+      setSelectedCategories([normalizeFilter(cat)]);
+    }
+  }, [searchParams]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
@@ -280,5 +289,19 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="pt-24 pb-16 sm:pt-28 sm:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse text-white/30 text-lg">Chargement...</div>
+        </div>
+      </div>
+    }>
+      <ProductsPageContent />
+    </Suspense>
   );
 }

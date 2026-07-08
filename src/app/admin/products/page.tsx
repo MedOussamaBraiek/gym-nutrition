@@ -19,6 +19,7 @@ const emptyProduct = (): Product => ({
   benefits: [],
   weight: "",
   inStock: true,
+  stock: 1,
 });
 
 export default function AdminProducts() {
@@ -43,7 +44,7 @@ export default function AdminProducts() {
   };
 
   const openEdit = (p: Product) => {
-    setForm({ ...p });
+    setForm({ ...p, stock: p.stock ?? (p.inStock ? 1 : 0) });
     setEditing(p);
     setShowForm(true);
   };
@@ -138,16 +139,19 @@ export default function AdminProducts() {
                   <td className="px-4 py-3 text-slate-600 hidden md:table-cell">{p.brand}</td>
                   <td className="px-4 py-3 font-medium text-slate-900">{p.price} TND</td>
                   <td className="px-4 py-3 hidden sm:table-cell">
-                    <button
-                      onClick={() => updateProduct(p.id, { inStock: !p.inStock })}
-                      className={`text-xs font-medium px-2 py-0.5 rounded-full border transition-colors ${
-                        p.inStock
-                          ? "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
-                          : "bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
-                      }`}
-                    >
-                      {p.inStock ? "En stock" : "Rupture"}
-                    </button>
+                    {(() => {
+                      const s = p.stock;
+                      const inStock = s !== undefined ? s > 0 : p.inStock;
+                      return (
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${
+                          inStock
+                            ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                            : "bg-red-50 text-red-600 border-red-200"
+                        }`}>
+                          {s !== undefined ? `${s} en stock` : inStock ? "En stock" : "Rupture"}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -282,15 +286,17 @@ export default function AdminProducts() {
                   </div>
                 </Field>
 
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="inStock"
-                    checked={form.inStock}
-                    onChange={(e) => setForm({ ...form, inStock: e.target.checked })}
-                    className="rounded border-slate-300 text-primary focus:ring-primary"
-                  />
-                  <label htmlFor="inStock" className="text-sm text-slate-700">En stock</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Stock">
+                    <input type="number" min={0} value={form.stock ?? 0} onChange={(e) => { const s = Number(e.target.value); setForm({ ...form, stock: s, inStock: s > 0 }); }} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                  </Field>
+                  <Field label="En stock ?">
+                    <div className="flex items-center h-full">
+                      <span className={`text-sm font-medium ${form.inStock ? "text-emerald-600" : "text-red-500"}`}>
+                        {form.inStock ? "Oui" : "Non"}
+                      </span>
+                    </div>
+                  </Field>
                 </div>
               </div>
 

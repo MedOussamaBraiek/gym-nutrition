@@ -14,6 +14,7 @@ export interface Product {
   flavor?: string;
   weight: string;
   inStock: boolean;
+  stock?: number;
   badge?: "new" | "sale" | "best-seller";
 }
 
@@ -38,6 +39,7 @@ export const products: Product[] = [
     flavor: "Chocolat, Vanille, Fraise",
     weight: "2.27 kg",
     inStock: true,
+    stock: 15,
     badge: "best-seller",
   },
   {
@@ -58,6 +60,7 @@ export const products: Product[] = [
     ],
     weight: "500 g",
     inStock: true,
+    stock: 22,
     badge: "best-seller",
   },
   {
@@ -79,6 +82,7 @@ export const products: Product[] = [
     flavor: "Chocolat, Vanille",
     weight: "3 kg",
     inStock: true,
+    stock: 8,
     badge: "sale",
   },
   {
@@ -100,6 +104,7 @@ export const products: Product[] = [
     flavor: "Fruits rouges, Citron",
     weight: "400 g",
     inStock: true,
+    stock: 30,
   },
   {
     id: "pre-workout",
@@ -120,6 +125,7 @@ export const products: Product[] = [
     flavor: "Fruits exotiques",
     weight: "300 g",
     inStock: true,
+    stock: 12,
     badge: "new",
   },
   {
@@ -140,7 +146,8 @@ export const products: Product[] = [
     ],
     flavor: "Chocolat, Vanille",
     weight: "2 kg",
-    inStock: true,
+    inStock: false,
+    stock: 0,
   },
   {
     id: "collagen",
@@ -160,6 +167,7 @@ export const products: Product[] = [
     ],
     weight: "300 g",
     inStock: true,
+    stock: 18,
   },
   {
     id: "omega-3",
@@ -179,6 +187,7 @@ export const products: Product[] = [
     ],
     weight: "120 capsules",
     inStock: true,
+    stock: 25,
   },
   {
     id: "vitamin-d",
@@ -198,6 +207,7 @@ export const products: Product[] = [
     ],
     weight: "120 capsules",
     inStock: true,
+    stock: 40,
   },
 ];
 
