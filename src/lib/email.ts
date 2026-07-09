@@ -16,8 +16,8 @@ function getTransporter() {
   });
 }
 
-const from = process.env.FROM_EMAIL || "oussembraiek@gmail.com";
-const adminEmail = "oussembraiek@gmail.com";
+const from = process.env.FROM_EMAIL || "oussemabraiek@gmail.com";
+const adminEmail = "oussemabraiek@gmail.com";
 
 const baseStyle = `
   body { margin:0; padding:0; background:#f4f4f4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
@@ -67,24 +67,38 @@ function sendMail(to: string, subject: string, html: string) {
     console.log("SMTP not configured — skipping email");
     return;
   }
-  return getTransporter().sendMail({ to, from, subject, html: wrap(html) }).catch((err) => {
-    console.error("SMTP send error:", err.message, err.code);
-  });
+  return getTransporter()
+    .sendMail({ to, from, subject, html: wrap(html) })
+    .catch((err) => {
+      console.error("SMTP send error:", err.message, err.code);
+    });
 }
 
 export async function sendNewsletterNotification(email: string) {
-  await sendMail(adminEmail, "📧 Nouvel abonné Newsletter", `
+  await sendMail(
+    adminEmail,
+    "📧 Nouvel abonné Newsletter",
+    `
     <h2>Nouvel abonné</h2>
     <p class="label">Email</p>
     <p class="value">${email}</p>
     <hr class="divider">
     <p class="label">Date</p>
     <p class="value">${new Date().toLocaleString("fr-TN")}</p>
-  `);
+  `,
+  );
 }
 
-export async function sendContactNotification(name: string, email: string, subject: string, message: string) {
-  await sendMail(adminEmail, `📬 ${name} t'a envoyé un message`, `
+export async function sendContactNotification(
+  name: string,
+  email: string,
+  subject: string,
+  message: string,
+) {
+  await sendMail(
+    adminEmail,
+    `📬 ${name} t'a envoyé un message`,
+    `
     <h2>Nouveau message de contact</h2>
     <p class="label">Nom</p>
     <p class="value">${name}</p>
@@ -95,22 +109,34 @@ export async function sendContactNotification(name: string, email: string, subje
     <hr class="divider">
     <p class="label">Message</p>
     <p style="background:#f9f9f9;padding:16px;border-radius:8px;color:#333;font-size:14px;line-height:1.6">${message.replace(/\n/g, "<br>")}</p>
-  `);
+  `,
+  );
 }
 
 export async function sendContactConfirmation(name: string, email: string) {
-  await sendMail(email, "✅ Message reçu — Tunisia Nutrition", `
+  await sendMail(
+    email,
+    "✅ Message reçu — Tunisia Nutrition",
+    `
     <h2>Merci ${name} !</h2>
     <p>On a bien reçu ton message et on te répondra dans les plus brefs délais.</p>
     <p>Notre équipe est disponible du <strong>Lun au Sam (9h-18h)</strong>.</p>
     <hr class="divider">
     <p style="font-size:13px;color:#888">En attendant, n'hésite pas à découvrir nos <a href="https://gym-nutrition-sigma.vercel.app/products" style="color:${primary}">nouveautés</a>.</p>
-  `);
+  `,
+  );
 }
 
 export async function sendOrderNotification(order: {
   _id: string;
-  customer: { name: string; phone: string; email: string; address: string; city: string; notes: string };
+  customer: {
+    name: string;
+    phone: string;
+    email: string;
+    address: string;
+    city: string;
+    notes: string;
+  };
   items: { name: string; quantity: number; price: number }[];
   subtotal: number;
   deliveryFee: number;
@@ -118,10 +144,16 @@ export async function sendOrderNotification(order: {
   total: number;
 }) {
   const itemsHtml = order.items
-    .map((i) => `<tr><td>${i.name}</td><td>${i.quantity}</td><td>${i.price} TND</td><td>${(i.price * i.quantity).toFixed(2)} TND</td></tr>`)
+    .map(
+      (i) =>
+        `<tr><td>${i.name}</td><td>${i.quantity}</td><td>${i.price} TND</td><td>${(i.price * i.quantity).toFixed(2)} TND</td></tr>`,
+    )
     .join("");
 
-  await sendMail(adminEmail, `🛒 Nouvelle commande — ${order.customer.name}`, `
+  await sendMail(
+    adminEmail,
+    `🛒 Nouvelle commande — ${order.customer.name}`,
+    `
     <h2>Nouvelle commande reçue</h2>
     <p style="margin-bottom:16px;font-size:13px;color:#888">Commande #${order._id.toString().slice(-8).toUpperCase()}</p>
     <h3 style="font-size:15px;color:#111;margin:0 0 12px">Client</h3>
@@ -145,7 +177,8 @@ export async function sendOrderNotification(order: {
       ${order.discount > 0 ? `<tr><td style="padding:4px 8px;color:#888;font-size:14px">Réduction</td><td style="padding:4px 8px;text-align:right;color:#059669;font-size:14px">-${order.discount.toFixed(2)} TND</td></tr>` : ""}
       <tr><td style="padding:8px;font-weight:700;color:#111;font-size:16px">Total</td><td style="padding:8px;text-align:right;font-weight:700;color:#111;font-size:16px">${order.total.toFixed(2)} TND</td></tr>
     </table>
-  `);
+  `,
+  );
 }
 
 export async function sendOrderConfirmation(order: {
@@ -160,10 +193,16 @@ export async function sendOrderConfirmation(order: {
   if (!order.customer.email) return;
 
   const itemsHtml = order.items
-    .map((i) => `<tr><td>${i.name}</td><td>${i.quantity}</td><td>${i.price} TND</td><td>${(i.price * i.quantity).toFixed(2)} TND</td></tr>`)
+    .map(
+      (i) =>
+        `<tr><td>${i.name}</td><td>${i.quantity}</td><td>${i.price} TND</td><td>${(i.price * i.quantity).toFixed(2)} TND</td></tr>`,
+    )
     .join("");
 
-  await sendMail(order.customer.email, "✅ Commande confirmée — Tunisia Nutrition", `
+  await sendMail(
+    order.customer.email,
+    "✅ Commande confirmée — Tunisia Nutrition",
+    `
     <h2>Merci ${order.customer.name} !</h2>
     <p style="font-size:15px">Ta commande a bien été reçue <span style="font-size:20px">🎉</span></p>
     <p style="font-size:13px;color:#888">Commande #${order._id.toString().slice(-8).toUpperCase()}</p>
@@ -181,5 +220,6 @@ export async function sendOrderConfirmation(order: {
     <hr class="divider">
     <p style="font-size:14px;color:#555"><strong>🚚 Paiement à la livraison</strong><br>Prépare le montant en espèces. Notre livreur te contactera avant le passage.</p>
     <p style="font-size:13px;color:#888">Une question ? Réponds à cet email ou appelle-nous au +216 12 345 678.</p>
-  `);
+  `,
+  );
 }
