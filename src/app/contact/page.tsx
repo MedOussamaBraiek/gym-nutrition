@@ -47,8 +47,8 @@ export default function ContactPage() {
             Contacte-Nous
           </h1>
           <p className="mt-3 text-lg text-white/50 max-w-xl mx-auto">
-            Une question ? On est là pour t&apos;aider. Notre équipe te répond dans les
-            plus brefs délais.
+            Une question ? On est là pour t&apos;aider. Notre équipe te répond
+            dans les plus brefs délais.
           </p>
         </motion.div>
 
@@ -61,7 +61,10 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-white/70 mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-white/70 mb-2"
+                  >
                     Nom complet
                   </label>
                   <input
@@ -70,11 +73,14 @@ export default function ContactPage() {
                     name="name"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-dark-lighter border border-white/10 text-white placeholder-white/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                    placeholder="Omar Ben Salem"
+                    placeholder="Example"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-white/70 mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-white/70 mb-2"
+                  >
                     Email
                   </label>
                   <input
@@ -83,12 +89,15 @@ export default function ContactPage() {
                     name="email"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-dark-lighter border border-white/10 text-white placeholder-white/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                    placeholder="omar@example.com"
+                    placeholder="example@example.com"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-white/70 mb-2">
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-medium text-white/70 mb-2"
+                >
                   Sujet
                 </label>
                 <input
@@ -101,7 +110,10 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-white/70 mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-white/70 mb-2"
+                >
                   Message
                 </label>
                 <textarea
@@ -197,9 +209,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-medium text-white">Horaires</p>
-                    <p className="text-white/50">
-                      Lun - Sam : 9h00 - 18h00
-                    </p>
+                    <p className="text-white/50">Lun - Sam : 9h00 - 18h00</p>
                     <p className="text-white/50">Dim : Fermé</p>
                   </div>
                 </div>
@@ -211,8 +221,8 @@ export default function ContactPage() {
                 Livraison dans toute la Tunisie
               </h3>
               <p className="text-red-100 text-sm leading-relaxed">
-                Commandez maintenant et recevez vos produits en 24 à 48h. Paiement
-                à la livraison disponible.
+                Commandez maintenant et recevez vos produits en 24 à 48h.
+                Paiement à la livraison disponible.
               </p>
             </div>
           </motion.div>
