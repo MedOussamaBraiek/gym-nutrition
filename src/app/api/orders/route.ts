@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { OrderModel } from "@/lib/models/order";
-import { sendOrderNotification } from "@/lib/email";
+import { sendOrderNotification, sendOrderConfirmation } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -18,8 +18,14 @@ export async function POST(req: Request) {
     await connectDB();
     const body = await req.json();
     const order = await OrderModel.create(body);
+    const obj = order.toObject();
     try {
-      await sendOrderNotification(order.toObject());
+      await sendOrderNotification(obj);
+    } catch {
+      // non-critical
+    }
+    try {
+      await sendOrderConfirmation(obj);
     } catch {
       // non-critical
     }

@@ -68,6 +68,7 @@ function ProductsPageContent() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const cat = searchParams?.get("category");
@@ -165,12 +166,20 @@ function ProductsPageContent() {
           />
         </div>
 
+        <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="lg:hidden flex items-center gap-2 text-sm font-medium text-white bg-dark-lighter border border-white/10 rounded-xl px-4 py-2.5 mb-4 w-full"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 010 2H4a1 1 0 01-1-1zm4 6a1 1 0 011-1h8a1 1 0 010 2H8a1 1 0 01-1-1zm2 6a1 1 0 011-1h4a1 1 0 010 2h-4a1 1 0 01-1-1z" /></svg>
+            {showFilters ? "Masquer les filtres" : "Filtres"}{totalFilters > 0 && ` (${totalFilters})`}
+          </button>
+
         <div className="flex flex-col lg:flex-row gap-8">
           <motion.aside
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
-            className="lg:w-56 shrink-0"
+            className={`lg:w-56 shrink-0 ${showFilters ? "block" : "hidden lg:block"}`}
           >
             <div className="lg:sticky lg:top-28">
               <div className="flex items-center justify-between mb-4">

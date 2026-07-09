@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { ContactModel } from "@/lib/models/contact";
-import { sendContactNotification } from "@/lib/email";
+import { sendContactNotification, sendContactConfirmation } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -15,6 +15,12 @@ export async function POST(req: Request) {
 
     try {
       await sendContactNotification(name, email, subject, message);
+    } catch {
+      // non-critical
+    }
+
+    try {
+      await sendContactConfirmation(name, email);
     } catch {
       // non-critical
     }

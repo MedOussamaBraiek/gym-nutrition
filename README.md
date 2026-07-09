@@ -6,19 +6,20 @@ Plateforme complète de vente en ligne avec catalogue produits, panier, système
 
 ## Stack Technique
 
-| Technologie | Rôle |
-|-------------|------|
-| **Next.js 16** (App Router) | Framework full-stack |
-| **TypeScript** | Typage statique |
-| **Tailwind CSS v4** | Styles et design |
-| **Framer Motion** | Animations |
-| **MongoDB + Mongoose** | Base de données |
-| **bcryptjs** | Authentification admin |
-| **Lucide React** | Icônes |
+| Technologie                 | Rôle                   |
+| --------------------------- | ---------------------- |
+| **Next.js 16** (App Router) | Framework full-stack   |
+| **TypeScript**              | Typage statique        |
+| **Tailwind CSS v4**         | Styles et design       |
+| **Framer Motion**           | Animations             |
+| **MongoDB + Mongoose**      | Base de données        |
+| **bcryptjs**                | Authentification admin |
+| **Lucide React**            | Icônes                 |
 
 ## Fonctionnalités
 
 ### Public
+
 - **Page d'accueil** — Hero slider, produits mis en avant, marques, témoignages, newsletter
 - **Catalogue produits** — Filtres par catégorie, marque, objectif, prix + recherche textuelle
 - **Fiche produit** — Détails, quantité, bouton ajouter au panier, produits similaires
@@ -27,6 +28,7 @@ Plateforme complète de vente en ligne avec catalogue produits, panier, système
 - **Contact** — Page de contact
 
 ### Admin (`/admin`)
+
 - **Dashboard** — Statistiques (total produits, stock, valeur)
 - **Produits** — CRUD complet avec upload d'image, gestion des badges (Best-seller / Nouveau / Promo), prix original et prix promo
 - **Commandes** — Liste + détail, changement de statut (En attente → Confirmée → Expédiée → Livrée / Annulée), suppression
@@ -36,6 +38,7 @@ Plateforme complète de vente en ligne avec catalogue produits, panier, système
 ## Prise en main
 
 ### Prérequis
+
 - Node.js 18+
 - MongoDB Atlas (ou instance locale)
 
@@ -68,10 +71,11 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 Aller sur [/admin/login](http://localhost:3000/admin/login).
 
 **Identifiants par défaut :**
-- Email : `oussembraiek@gmail.com`
+
+- Email : `oussemabraiek@gmail.com`
 - Mot de passe : `admin123`
 
-*(La base de données est automatiquement seedée au premier accès)*
+_(La base de données est automatiquement seedée au premier accès)_
 
 ## Structure du projet
 
@@ -113,48 +117,52 @@ src/
 
 ## API Routes
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| GET | `/api/products` | Liste des produits |
-| POST | `/api/products` | Créer un produit |
-| GET | `/api/products/[id]` | Détail d'un produit |
-| PUT | `/api/products/[id]` | Modifier un produit |
-| DELETE | `/api/products/[id]` | Supprimer un produit |
-| POST | `/api/auth/login` | Connexion admin |
-| PUT | `/api/auth/password` | Changer mot de passe |
-| GET | `/api/orders` | Liste des commandes |
-| POST | `/api/orders` | Créer une commande |
-| GET | `/api/orders/[id]` | Détail commande |
-| PUT | `/api/orders/[id]` | Modifier statut |
-| DELETE | `/api/orders/[id]` | Supprimer commande |
-| GET | `/api/coupons` | Liste des codes promo |
-| POST | `/api/coupons` | Créer un code promo |
-| DELETE | `/api/coupons/[id]` | Supprimer un code |
-| GET | `/api/coupons/verify` | Vérifier un code |
-| GET | `/api/site-settings` | Récupérer paramètres |
-| PUT | `/api/site-settings` | Modifier paramètres |
-| POST | `/api/upload` | Uploader une image |
-| POST | `/api/seed` | Seeder la base |
+| Méthode | Route                 | Description           |
+| ------- | --------------------- | --------------------- |
+| GET     | `/api/products`       | Liste des produits    |
+| POST    | `/api/products`       | Créer un produit      |
+| GET     | `/api/products/[id]`  | Détail d'un produit   |
+| PUT     | `/api/products/[id]`  | Modifier un produit   |
+| DELETE  | `/api/products/[id]`  | Supprimer un produit  |
+| POST    | `/api/auth/login`     | Connexion admin       |
+| PUT     | `/api/auth/password`  | Changer mot de passe  |
+| GET     | `/api/orders`         | Liste des commandes   |
+| POST    | `/api/orders`         | Créer une commande    |
+| GET     | `/api/orders/[id]`    | Détail commande       |
+| PUT     | `/api/orders/[id]`    | Modifier statut       |
+| DELETE  | `/api/orders/[id]`    | Supprimer commande    |
+| GET     | `/api/coupons`        | Liste des codes promo |
+| POST    | `/api/coupons`        | Créer un code promo   |
+| DELETE  | `/api/coupons/[id]`   | Supprimer un code     |
+| GET     | `/api/coupons/verify` | Vérifier un code      |
+| GET     | `/api/site-settings`  | Récupérer paramètres  |
+| PUT     | `/api/site-settings`  | Modifier paramètres   |
+| POST    | `/api/upload`         | Uploader une image    |
+| POST    | `/api/seed`           | Seeder la base        |
 
 ## Fonctionnalités clés
 
 ### Gestion des prix et promotion
+
 - **Prix actuel** : prix de vente affiché
 - **Ancien prix** : prix barré + badge `-XX%` automatique
 - **Badge Promo** : highlight visuel supplémentaire
 
 ### Livraison
+
 - Frais configurable depuis l'admin (défaut : 8 TND)
 - Seuil de livraison gratuite configurable (défaut : 100 TND)
 - Livraison 24-48h dans toute la Tunisie
 
 ### Coupons
+
 - Pourcentage ou montant fixe
 - Minimum de commande
 - Utilisations max + expiration
 - Vérification en temps réel dans le panier
 
 ### Images
+
 - Upload local via le formulaire admin (`/uploads/`)
 - Ou URL distante (ex. hébergement externe)
 
