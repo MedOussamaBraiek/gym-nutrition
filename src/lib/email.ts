@@ -1,21 +1,23 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: (process.env.SMTP_PORT || "587") === "465",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+function getTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: (process.env.SMTP_PORT || "587") === "465",
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
 
 const from = process.env.FROM_EMAIL || "oussembraiek@gmail.com";
 const adminEmail = "oussembraiek@gmail.com";
 
 function sendMail(to: string, subject: string, html: string) {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) return;
-  return transporter.sendMail({ to, from, subject, html });
+  return getTransporter().sendMail({ to, from, subject, html });
 }
 
 export async function sendNewsletterNotification(email: string) {
