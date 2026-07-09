@@ -89,6 +89,22 @@ export async function sendNewsletterNotification(email: string) {
   );
 }
 
+export async function sendNewsletterConfirmation(email: string) {
+  await sendMail(email, "Bienvenue dans la newsletter — Tunisia Nutrition", `
+    <h2>Bienvenue <span style="font-size:20px">🎉</span></h2>
+    <p>Tu es maintenant inscrit à la newsletter Tunisia Nutrition !</p>
+    <p>Tu recevras :</p>
+    <ul style="color:#555;line-height:1.8;padding-left:20px">
+      <li><strong>Offres exclusives</strong> réservées aux abonnés</li>
+      <li><strong>Nouveaux produits</strong> en avant-première</li>
+      <li><strong>Conseils fitness</strong> et programmes d'entraînement</li>
+    </ul>
+    <hr class="divider">
+    <p style="font-size:13px;color:#888">En attendant, découvre nos <a href="https://gym-nutrition-sigma.vercel.app/products" style="color:${primary}">meilleures ventes</a>.</p>
+    <p style="font-size:12px;color:#aaa">Tu peux te désinscrire à tout moment.</p>
+  `);
+}
+
 export async function sendContactNotification(
   name: string,
   email: string,

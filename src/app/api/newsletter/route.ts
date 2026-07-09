@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { NewsletterModel } from "@/lib/models/newsletter";
-import { sendNewsletterNotification } from "@/lib/email";
+import { sendNewsletterNotification, sendNewsletterConfirmation } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -18,7 +18,13 @@ export async function POST(req: Request) {
     try {
       await sendNewsletterNotification(email);
     } catch {
-      // notification email failure is non-critical
+      // non-critical
+    }
+
+    try {
+      await sendNewsletterConfirmation(email);
+    } catch {
+      // non-critical
     }
 
     return NextResponse.json({ message: "Inscription réussie" }, { status: 201 });
