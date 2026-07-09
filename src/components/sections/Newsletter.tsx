@@ -1,9 +1,39 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, Bell } from "lucide-react";
+import { Send, Mail, Bell, Check } from "lucide-react";
 
 export default function Newsletter() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus("success");
+        setMessage(data.message);
+        setEmail("");
+      } else {
+        setStatus("error");
+        setMessage(data.error);
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Erreur réseau. Réessaie.");
+    }
+  };
+
   return (
     <section className="relative py-20 sm:py-28 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-dark" />
@@ -44,7 +74,7 @@ export default function Newsletter() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
               className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10"
             >
               <div className="flex items-center gap-3 mb-4">
@@ -54,18 +84,30 @@ export default function Newsletter() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Ton adresse email"
                   className="flex-1 px-5 py-3.5 rounded-xl text-white placeholder-white/40 bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-transparent transition-all text-sm"
                   required
+                  disabled={status === "loading"}
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2 bg-white text-primary px-6 py-3.5 rounded-xl font-semibold hover:bg-red-50 transition-all duration-200 shadow-lg shadow-black/20"
+                  disabled={status === "loading"}
+                  className="inline-flex items-center justify-center gap-2 bg-white text-primary px-6 py-3.5 rounded-xl font-semibold hover:bg-red-50 transition-all duration-200 shadow-lg shadow-black/20 disabled:opacity-50"
                 >
-                  <Send className="w-4 h-4" />
-                  S&apos;inscrire
+                  {status === "loading" ? <span>...</span> : status === "success" ? (
+                    <><Check className="w-4 h-4" /> Inscrit</>
+                  ) : (
+                    <><Send className="w-4 h-4" /> S&apos;inscrire</>
+                  )}
                 </button>
               </div>
+              {message && (
+                <p className={`mt-3 text-xs ${status === "success" ? "text-green-300" : "text-red-300"}`}>
+                  {message}
+                </p>
+              )}
               <p className="mt-3 text-xs text-red-200/60">
                 Pas de spam. Désinscription à tout moment.
               </p>

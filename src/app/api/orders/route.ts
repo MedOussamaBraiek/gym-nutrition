@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { OrderModel } from "@/lib/models/order";
+import { sendOrderNotification } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -17,6 +18,11 @@ export async function POST(req: Request) {
     await connectDB();
     const body = await req.json();
     const order = await OrderModel.create(body);
+    try {
+      await sendOrderNotification(order.toObject());
+    } catch {
+      // non-critical
+    }
     return NextResponse.json(order, { status: 201 });
   } catch {
     return NextResponse.json({ error: "Failed to create order" }, { status: 500 });

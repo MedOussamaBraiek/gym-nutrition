@@ -6,10 +6,32 @@ import { Phone, Mail, MapPin, Send, Clock } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    const form = e.target as HTMLFormElement;
+    const data = Object.fromEntries(new FormData(form));
+    setSending(true);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const err = await res.json();
+        setError(err.error || "Erreur lors de l'envoi");
+      }
+    } catch {
+      setError("Erreur réseau. Réessaie.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -45,6 +67,7 @@ export default function ContactPage() {
                   <input
                     type="text"
                     id="name"
+                    name="name"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-dark-lighter border border-white/10 text-white placeholder-white/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     placeholder="Omar Ben Salem"
@@ -57,6 +80,7 @@ export default function ContactPage() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-dark-lighter border border-white/10 text-white placeholder-white/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     placeholder="omar@example.com"
@@ -70,6 +94,7 @@ export default function ContactPage() {
                 <input
                   type="text"
                   id="subject"
+                  name="subject"
                   required
                   className="w-full px-4 py-3 rounded-xl bg-dark-lighter border border-white/10 text-white placeholder-white/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="Commande, question produit..."
@@ -81,6 +106,7 @@ export default function ContactPage() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
                   required
                   className="w-full px-4 py-3 rounded-xl bg-dark-lighter border border-white/10 text-white placeholder-white/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
@@ -89,10 +115,11 @@ export default function ContactPage() {
               </div>
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-primary-dark transition-all duration-200 hover:shadow-lg hover:shadow-primary/25"
+                disabled={sending}
+                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-primary-dark transition-all duration-200 hover:shadow-lg hover:shadow-primary/25 disabled:opacity-50"
               >
                 <Send className="w-5 h-5" />
-                Envoyer le Message
+                {sending ? "Envoi..." : "Envoyer le Message"}
               </button>
             </form>
 
@@ -103,6 +130,15 @@ export default function ContactPage() {
                 className="mt-6 p-4 bg-primary/10 text-primary rounded-xl text-center font-medium border border-primary/20"
               >
                 Message envoyé avec succès ! On te répondra rapidement.
+              </motion.div>
+            )}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 p-4 bg-red-500/10 text-red-400 rounded-xl text-center font-medium border border-red-500/20"
+              >
+                {error}
               </motion.div>
             )}
           </motion.div>
