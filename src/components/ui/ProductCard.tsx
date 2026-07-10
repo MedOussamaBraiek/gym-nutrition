@@ -36,9 +36,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.id}`}
-      className="group block bg-dark-lighter rounded-2xl border border-white/5 overflow-hidden hover:border-primary/30 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] transition-all duration-500"
+      className="group flex flex-col bg-dark-lighter rounded-2xl border border-white/5 overflow-hidden hover:border-primary/30 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] transition-all duration-500 h-full"
     >
-      <div className="relative aspect-square overflow-hidden bg-dark">
+      <div className="relative aspect-square overflow-hidden bg-dark shrink-0">
         {product.image && (
           <img
             src={product.image}
@@ -75,7 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         })()}
       </div>
 
-      <div className="p-4 sm:p-5">
+      <div className="p-4 sm:p-5 flex flex-col flex-1">
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
             {product.category}
@@ -91,7 +91,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
 
-        <div className="mt-3 flex items-center justify-between">
+        <div className="mt-auto pt-3 flex items-center justify-between">
           <div className="flex items-baseline gap-2">
             <span className="text-xl font-bold text-primary group-hover:text-primary-light transition-colors">
               {product.price} TND
