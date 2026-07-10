@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, X, ChevronDown } from "lucide-react";
-import { categories, goals } from "@/lib/products";
+import { categories, brands as staticBrands, goals } from "@/lib/products";
 import { useProducts } from "@/lib/use-products";
 import ProductCard from "@/components/ui/ProductCard";
 
@@ -79,6 +79,16 @@ function ProductsPageContent() {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [settingsBrands, setSettingsBrands] = useState<{ name: string }[]>(staticBrands.slice(1).map((b) => ({ name: b.name })));
+
+  useEffect(() => {
+    fetch("/api/site-settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.brands && data.brands.length > 0) setSettingsBrands(data.brands);
+      })
+      .catch(() => {});
+  }, []);
 
   const normalizeFilter = (value: string) =>
     value
@@ -128,9 +138,8 @@ function ProductsPageContent() {
     priceRange[1] < 500;
 
   const dynamicBrands = useMemo(() => {
-    const unique = [...new Set(products.map((p) => p.brand).filter(Boolean))];
-    return [{ id: "all", name: "Toutes" }, ...unique.map((b) => ({ id: normalizeFilter(b), name: b }))];
-  }, [products]);
+    return [{ id: "all", name: "Toutes" }, ...settingsBrands.map((b) => ({ id: normalizeFilter(b.name), name: b.name }))];
+  }, [settingsBrands]);
 
   const clearFilters = () => {
     setSelectedCategories([]);
