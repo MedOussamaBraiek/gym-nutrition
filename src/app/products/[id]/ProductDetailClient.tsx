@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useProducts } from "@/lib/use-products";
 import { useCart } from "@/lib/cart-store";
+import { getStockLabel } from "@/lib/stock";
 import ProductCard from "@/components/ui/ProductCard";
 import type { Product } from "@/lib/products";
 
@@ -138,16 +139,24 @@ export default function ProductDetailClient({ initialProduct }: { initialProduct
             <div className="mt-4 flex items-center gap-2 text-sm">
               {(() => {
                 const s = product.stock;
+                const label = getStockLabel(s, product.inStock);
                 const inStock = s !== undefined ? s > 0 : product.inStock;
                 return inStock ? (
                   <>
                     <Check className="w-4 h-4 text-green-500" />
-                    <span className="text-green-400 font-medium">
-                      {s !== undefined ? `${s} en stock` : "En stock"}
+                    <span className={`font-medium ${(() => {
+                      if (s !== undefined) {
+                        if (s <= 5) return "text-amber-400";
+                        if (s <= 20) return "text-blue-400";
+                        return "text-emerald-400";
+                      }
+                      return "text-green-400";
+                    })()}`}>
+                      {label}
                     </span>
                   </>
                 ) : (
-                  <span className="text-red-400 font-medium">Rupture de stock</span>
+                  <span className="text-red-400 font-medium">{label}</span>
                 );
               })()}
             </div>

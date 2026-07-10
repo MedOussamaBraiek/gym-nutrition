@@ -115,7 +115,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-white/40">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
-                Tunis, Tunisie
+                Monastir, Tunisie
               </li>
               <li>
                 <a
@@ -128,11 +128,11 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:contact@tunisianutrition.tn"
+                  href="mailto:hassiba.jabri.business@gmail.com"
                   className="flex items-center gap-3 text-sm text-white/40 hover:text-primary transition-colors"
                 >
                   <Mail className="w-4 h-4 shrink-0 text-primary" />
-                  contact@tunisianutrition.tn
+                  hassiba.jabri.business@gmail.com
                 </a>
               </li>
             </ul>

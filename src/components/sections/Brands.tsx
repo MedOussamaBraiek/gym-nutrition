@@ -11,84 +11,74 @@ interface BrandItem {
 
 const brandList: BrandItem[] = [
   {
-    name: "Scitec Nutrition",
-    origin: "USA",
+    name: "Olimp",
+    origin: "Pologne",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/scitec.png-6863bc2e0bd79.png",
   },
   {
-    name: "Cellucor",
+    name: "BioTechUSA",
     origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo.png-68c683a976c4e.png",
-  },
-  {
-    name: "Animal",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp",
-  },
-  {
-    name: "Xtend",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/image-Photoroom%20(12).png-6921b5ba0a0da.png",
-  },
-  {
-    name: "Universal",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp",
-  },
-  {
-    name: "BiotechUSA",
-    origin: "Allemagne",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/BIOTECHUSA_1.png-69ca8c49d4735.png",
   },
   {
-    name: "Ronnie Coleman",
+    name: "WeightWorld",
+    origin: "UK",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp",
+  },
+  {
+    name: "Kevin Levrone",
     origin: "USA",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__3_-removebg-preview.webp-677e895448c8a.webp",
   },
   {
-    name: "HN Labs",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__1_-removebg-preview.webp-673dbb5dc4fb6.webp",
+    name: "SFD",
+    origin: "France",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp",
   },
   {
-    name: "Scitec Nutrition",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/scitec.png-6863bc2e0bd79.png",
-  },
-  {
-    name: "Cellucor",
+    name: "MuscleTech",
     origin: "USA",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/logo.png-68c683a976c4e.png",
   },
   {
-    name: "Animal",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp",
-  },
-  {
-    name: "Xtend",
-    origin: "USA",
+    name: "ERIC FAVRE",
+    origin: "France",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/image-Photoroom%20(12).png-6921b5ba0a0da.png",
   },
   {
-    name: "Universal",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp",
+    name: "Olimp",
+    origin: "Pologne",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/scitec.png-6863bc2e0bd79.png",
   },
   {
-    name: "BiotechUSA",
-    origin: "Allemagne",
+    name: "BioTechUSA",
+    origin: "USA",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/BIOTECHUSA_1.png-69ca8c49d4735.png",
   },
   {
-    name: "Ronnie Coleman",
+    name: "WeightWorld",
+    origin: "UK",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp",
+  },
+  {
+    name: "Kevin Levrone",
     origin: "USA",
     logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__3_-removebg-preview.webp-677e895448c8a.webp",
   },
   {
-    name: "HN Labs",
+    name: "SFD",
+    origin: "France",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp",
+  },
+  {
+    name: "MuscleTech",
     origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__1_-removebg-preview.webp-673dbb5dc4fb6.webp",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo.png-68c683a976c4e.png",
+  },
+  {
+    name: "ERIC FAVRE",
+    origin: "France",
+    logo: "https://housenutrition.tn/storage/uploads/brands/images/image-Photoroom%20(12).png-6921b5ba0a0da.png",
   },
 ];
 

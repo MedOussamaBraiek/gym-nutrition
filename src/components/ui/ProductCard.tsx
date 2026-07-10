@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ShoppingCart, Star } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
+import { getStockLabel } from "@/lib/stock";
 
 interface ProductCardProps {
   product: Product;
@@ -112,7 +113,21 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="mt-2 flex items-center justify-between">
-          <span className="text-xs text-white/30">{product.weight}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-white/30">{product.weight}</span>
+            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${(() => {
+              const s = product.stock;
+              if (s !== undefined) {
+                if (s === 0) return "bg-red-500/20 text-red-400";
+                if (s <= 5) return "bg-amber-500/20 text-amber-400";
+                if (s <= 20) return "bg-blue-500/20 text-blue-400";
+                return "bg-emerald-500/20 text-emerald-400";
+              }
+              return product.inStock ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400";
+            })()}`}>
+              {getStockLabel(product.stock, product.inStock)}
+            </span>
+          </div>
           <div className="flex items-center gap-1">
             <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
             <span className="text-xs text-white/40">5.0</span>

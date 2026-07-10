@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, Edit2, Trash2, X, Check, AlertTriangle, Package, Upload } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, X, Check, AlertTriangle, Package, Upload, Loader2 } from "lucide-react";
 import { useAdmin } from "@/lib/admin-store";
 import { categories, brands, goals, type Product } from "@/lib/products";
+import { getStockLabel, getStockColor } from "@/lib/stock";
 
 const emptyProduct = (): Product => ({
   id: "",
   name: "",
   category: "Protéines",
-  brand: "Animal",
+  brand: "Olimp",
   goal: "Prise de Masse",
   price: 0,
   image: "",
@@ -29,6 +30,7 @@ export default function AdminProducts() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [form, setForm] = useState<Product>(emptyProduct());
+  const [uploading, setUploading] = useState(false);
 
   const filtered = products.filter(
     (p) =>
@@ -139,19 +141,9 @@ export default function AdminProducts() {
                   <td className="px-4 py-3 text-slate-600 hidden md:table-cell">{p.brand}</td>
                   <td className="px-4 py-3 font-medium text-slate-900">{p.price} TND</td>
                   <td className="px-4 py-3 hidden sm:table-cell">
-                    {(() => {
-                      const s = p.stock;
-                      const inStock = s !== undefined ? s > 0 : p.inStock;
-                      return (
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${
-                          inStock
-                            ? "bg-emerald-50 text-emerald-600 border-emerald-200"
-                            : "bg-red-50 text-red-600 border-red-200"
-                        }`}>
-                          {s !== undefined ? `${s} en stock` : inStock ? "En stock" : "Rupture"}
-                        </span>
-                      );
-                    })()}
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${getStockColor(p.stock, p.inStock)}`}>
+                      {getStockLabel(p.stock, p.inStock)}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -265,21 +257,30 @@ export default function AdminProducts() {
                 <Field label="Image">
                   <div className="flex gap-2">
                     <input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="https://..." />
-                    <label className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors">
-                      <Upload className="w-4 h-4" />
-                      Upload
+                    <label className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors disabled:opacity-50">
+                      {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                      {uploading ? "Upload..." : "Upload"}
                       <input
                         type="file"
                         accept="image/*"
                         className="hidden"
+                        disabled={uploading}
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-                          const fd = new FormData();
-                          fd.append("file", file);
-                          const res = await fetch("/api/upload", { method: "POST", body: fd });
-                          const data = await res.json();
-                          if (data.url) setForm({ ...form, image: data.url });
+                          setUploading(true);
+                          try {
+                            const fd = new FormData();
+                            fd.append("file", file);
+                            const res = await fetch("/api/upload", { method: "POST", body: fd });
+                            const data = await res.json();
+                            if (data.url) setForm({ ...form, image: data.url });
+                            else alert(data.error || "Upload échoué");
+                          } catch {
+                            alert("Erreur réseau lors de l'upload");
+                          } finally {
+                            setUploading(false);
+                          }
                         }}
                       />
                     </label>

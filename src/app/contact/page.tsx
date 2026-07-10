@@ -187,10 +187,10 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium text-white">Email</p>
                     <a
-                      href="mailto:contact@tunisianutrition.tn"
+                      href="mailto:hassiba.jabri.business@gmail.com"
                       className="text-white/50 hover:text-primary transition-colors"
                     >
-                      contact@tunisianutrition.tn
+                      hassiba.jabri.business@gmail.com
                     </a>
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-medium text-white">Adresse</p>
-                    <p className="text-white/50">Tunis, Tunisie</p>
+                    <p className="text-white/50">Monastir, Tunisie</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
