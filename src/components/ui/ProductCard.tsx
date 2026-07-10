@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { ShoppingCart, Star } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
@@ -40,12 +39,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div className="relative aspect-square overflow-hidden bg-dark">
         {product.image && (
-          <Image
+          <img
             src={product.image}
             alt={product.name}
-            fill
-            sizes="(max-width: 768px) 50vw, 33vw"
-            className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+            className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
