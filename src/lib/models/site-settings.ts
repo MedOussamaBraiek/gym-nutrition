@@ -46,6 +46,11 @@ const siteSettingsSchema = new mongoose.Schema({
     whatsapp: { type: String, default: "+216 XX XXX XXX" },
     address: { type: String, default: "Tunis, Tunisie" },
   },
+  brands: [{
+    name: { type: String, default: "" },
+    origin: { type: String, default: "" },
+    logo: { type: String, default: "" },
+  }],
 });
 
 export const SiteSettingsModel =

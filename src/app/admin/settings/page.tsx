@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Save, RefreshCw, Truck, Image, MessageSquare, Star, Info, Mail, Check } from "lucide-react";
+import { Save, RefreshCw, Truck, Image, MessageSquare, Star, Info, Mail, Check, Tag, Plus, Trash2, Globe } from "lucide-react";
 
 const tabs = [
   { id: "hero", label: "Hero", icon: Image },
@@ -11,6 +11,7 @@ const tabs = [
   { id: "testimonials", label: "Avis", icon: MessageSquare },
   { id: "newsletter", label: "Newsletter", icon: Mail },
   { id: "delivery", label: "Livraison", icon: Truck },
+  { id: "brands", label: "Marques", icon: Tag },
 ];
 
 const defaultSettings = {
@@ -21,6 +22,7 @@ const defaultSettings = {
   testimonials: { title: "", items: [] as { name: string; role: string; text: string; avatar: string }[] },
   newsletter: { title: "", subtitle: "" },
   delivery: { fee: 8, freeThreshold: 100 },
+  brands: [] as { name: string; origin: string; logo: string }[],
 };
 
 export default function AdminSettings() {
@@ -30,6 +32,7 @@ export default function AdminSettings() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [allProducts, setAllProducts] = useState<{ _id: string; name: string; id: string }[]>([]);
+  const [newBrand, setNewBrand] = useState({ name: "", origin: "", logo: "" });
 
   useEffect(() => {
     Promise.all([
@@ -140,6 +143,59 @@ export default function AdminSettings() {
             <Field label="Frais de livraison (TND)"><input type="number" value={settings.delivery.fee} onChange={(e) => setSettings({ ...settings, delivery: { ...settings.delivery, fee: Number(e.target.value) } })} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900" /></Field>
             <Field label="Livraison gratuite à partir de (TND)"><input type="number" value={settings.delivery.freeThreshold} onChange={(e) => setSettings({ ...settings, delivery: { ...settings.delivery, freeThreshold: Number(e.target.value) } })} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900" /></Field>
           </>
+        )}
+
+        {tab === "brands" && (
+          <div className="space-y-4">
+            <Field label="Ajouter une marque">
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <input placeholder="Nom" value={newBrand.name} onChange={(e) => setNewBrand({ ...newBrand, name: e.target.value })} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900" />
+                  <input placeholder="Origine (pays)" value={newBrand.origin} onChange={(e) => setNewBrand({ ...newBrand, origin: e.target.value })} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900" />
+                </div>
+                <div className="flex gap-2">
+                  <input placeholder="URL du logo" value={newBrand.logo} onChange={(e) => setNewBrand({ ...newBrand, logo: e.target.value })} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900" />
+                  <button onClick={() => {
+                    if (!newBrand.name.trim() || !newBrand.logo.trim()) return;
+                    setSettings((prev) => ({
+                      ...prev,
+                      brands: [...prev.brands, { ...newBrand, name: newBrand.name.trim(), origin: newBrand.origin.trim(), logo: newBrand.logo.trim() }],
+                    }));
+                    setNewBrand({ name: "", origin: "", logo: "" });
+                  }} className="flex items-center gap-2 shrink-0 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+                    <Plus className="w-4 h-4" /> Ajouter
+                  </button>
+                </div>
+              </div>
+            </Field>
+
+            {settings.brands.length === 0 ? (
+              <p className="text-sm text-slate-400">Aucune marque. Ajoutez-en une ci-dessus.</p>
+            ) : (
+              <div className="grid gap-3">
+                {settings.brands.map((brand, i) => (
+                  <div key={i} className="flex items-center gap-4 px-4 py-3 rounded-lg border border-slate-200">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 shrink-0 flex items-center justify-center">
+                      {brand.logo ? (
+                        <img src={brand.logo} alt={brand.name} className="w-full h-full object-contain" />
+                      ) : (
+                        <Image className="w-5 h-5 text-slate-300" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-900">{brand.name}</p>
+                      <p className="text-xs text-slate-400 flex items-center gap-1"><Globe className="w-3 h-3" /> {brand.origin || "Non spécifié"}</p>
+                    </div>
+                    <button onClick={() => {
+                      setSettings((prev) => ({ ...prev, brands: prev.brands.filter((_, j) => j !== i) }));
+                    }} className="p-2 rounded-lg text-red-400 hover:bg-red-50 transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         )}
 
         {tab === "testimonials" && (

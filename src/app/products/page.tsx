@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, X, ChevronDown } from "lucide-react";
-import { categories, brands, goals } from "@/lib/products";
+import { categories, goals } from "@/lib/products";
 import { useProducts } from "@/lib/use-products";
 import ProductCard from "@/components/ui/ProductCard";
 
@@ -127,6 +127,11 @@ function ProductsPageContent() {
     priceRange[0] > 0 ||
     priceRange[1] < 500;
 
+  const dynamicBrands = useMemo(() => {
+    const unique = [...new Set(products.map((p) => p.brand).filter(Boolean))];
+    return [{ id: "all", name: "Toutes" }, ...unique.map((b) => ({ id: normalizeFilter(b), name: b }))];
+  }, [products]);
+
   const clearFilters = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
@@ -208,7 +213,7 @@ function ProductsPageContent() {
 
                 <FilterGroup
                   title="Marques"
-                  items={brands}
+                  items={dynamicBrands}
                   selected={selectedBrands}
                   onChange={(id) =>
                     toggleFilter(selectedBrands, setSelectedBrands, id)

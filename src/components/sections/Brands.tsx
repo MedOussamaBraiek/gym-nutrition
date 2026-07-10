@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -9,80 +10,34 @@ interface BrandItem {
   logo: string;
 }
 
-const brandList: BrandItem[] = [
-  {
-    name: "Olimp",
-    origin: "Pologne",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/scitec.png-6863bc2e0bd79.png",
-  },
-  {
-    name: "BioTechUSA",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/BIOTECHUSA_1.png-69ca8c49d4735.png",
-  },
-  {
-    name: "WeightWorld",
-    origin: "UK",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp",
-  },
-  {
-    name: "Kevin Levrone",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__3_-removebg-preview.webp-677e895448c8a.webp",
-  },
-  {
-    name: "SFD",
-    origin: "France",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp",
-  },
-  {
-    name: "MuscleTech",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo.png-68c683a976c4e.png",
-  },
-  {
-    name: "ERIC FAVRE",
-    origin: "France",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/image-Photoroom%20(12).png-6921b5ba0a0da.png",
-  },
-  {
-    name: "Olimp",
-    origin: "Pologne",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/scitec.png-6863bc2e0bd79.png",
-  },
-  {
-    name: "BioTechUSA",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/BIOTECHUSA_1.png-69ca8c49d4735.png",
-  },
-  {
-    name: "WeightWorld",
-    origin: "UK",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp",
-  },
-  {
-    name: "Kevin Levrone",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__3_-removebg-preview.webp-677e895448c8a.webp",
-  },
-  {
-    name: "SFD",
-    origin: "France",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp",
-  },
-  {
-    name: "MuscleTech",
-    origin: "USA",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/logo.png-68c683a976c4e.png",
-  },
-  {
-    name: "ERIC FAVRE",
-    origin: "France",
-    logo: "https://housenutrition.tn/storage/uploads/brands/images/image-Photoroom%20(12).png-6921b5ba0a0da.png",
-  },
+const fallbackBrands: BrandItem[] = [
+  { name: "Olimp", origin: "Pologne", logo: "https://housenutrition.tn/storage/uploads/brands/images/scitec.png-6863bc2e0bd79.png" },
+  { name: "BioTechUSA", origin: "USA", logo: "https://housenutrition.tn/storage/uploads/brands/images/BIOTECHUSA_1.png-69ca8c49d4735.png" },
+  { name: "WeightWorld", origin: "UK", logo: "https://housenutrition.tn/storage/uploads/brands/images/universal.webp-663f3d4a2cf02.webp" },
+  { name: "Kevin Levrone", origin: "USA", logo: "https://housenutrition.tn/storage/uploads/brands/images/logo__3_-removebg-preview.webp-677e895448c8a.webp" },
+  { name: "SFD", origin: "France", logo: "https://housenutrition.tn/storage/uploads/brands/images/animal.webp-663f40d543c36.webp-691ee74b7d208.webp" },
+  { name: "MuscleTech", origin: "USA", logo: "https://housenutrition.tn/storage/uploads/brands/images/logo.png-68c683a976c4e.png" },
+  { name: "ERIC FAVRE", origin: "France", logo: "https://housenutrition.tn/storage/uploads/brands/images/image-Photoroom%20(12).png-6921b5ba0a0da.png" },
 ];
 
 export default function Brands() {
+  const [brandList, setBrandList] = useState<BrandItem[]>(fallbackBrands);
+
+  useEffect(() => {
+    fetch("/api/site-settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.brands && data.brands.length > 0) {
+          setBrandList(data.brands);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!brandList.length) return null;
+
+  const marqueeBrands = [...brandList, ...brandList];
+
   return (
     <section className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,7 +62,7 @@ export default function Brands() {
 
       <div className="relative">
         <div className="flex gap-24 animate-marquee w-max items-center">
-          {brandList.map((brand, i) => (
+          {marqueeBrands.map((brand, i) => (
             <div key={i} className="flex flex-col items-center gap-4 shrink-0">
               <Image
                 src={brand.logo}

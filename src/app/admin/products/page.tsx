@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, Edit2, Trash2, X, Check, AlertTriangle, Package, Upload, Loader2 } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, X, Check, AlertTriangle, Package, Upload, Loader2, Tag } from "lucide-react";
 import { useAdmin } from "@/lib/admin-store";
-import { categories, brands, goals, type Product } from "@/lib/products";
+import { categories, brands as staticBrands, goals, type Product } from "@/lib/products";
 import { getStockLabel, getStockColor } from "@/lib/stock";
 
 const emptyProduct = (): Product => ({
   id: "",
   name: "",
   category: "Protéines",
-  brand: "Olimp",
+  brand: "",
   goal: "Prise de Masse",
   price: 0,
   image: "",
@@ -31,6 +31,43 @@ export default function AdminProducts() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [form, setForm] = useState<Product>(emptyProduct());
   const [uploading, setUploading] = useState(false);
+  const [settingsBrands, setSettingsBrands] = useState<{ name: string }[]>(staticBrands.slice(1).map((b) => ({ name: b.name })));
+  const [showBrandManager, setShowBrandManager] = useState(false);
+  const [newBrandName, setNewBrandName] = useState("");
+
+  useEffect(() => {
+    fetch("/api/site-settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.brands && data.brands.length > 0) setSettingsBrands(data.brands);
+      })
+      .catch(() => {});
+  }, []);
+
+  const brandNames = settingsBrands.map((b) => b.name);
+
+  const addBrand = async () => {
+    const name = newBrandName.trim();
+    if (!name || brandNames.includes(name)) return;
+    const updated = [...settingsBrands, { name }];
+    setSettingsBrands(updated);
+    setNewBrandName("");
+    await fetch("/api/site-settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ brands: updated }),
+    }).catch(() => {});
+  };
+
+  const deleteBrand = async (name: string) => {
+    const updated = settingsBrands.filter((b) => b.name !== name);
+    setSettingsBrands(updated);
+    await fetch("/api/site-settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ brands: updated }),
+    }).catch(() => {});
+  };
 
   const filtered = products.filter(
     (p) =>
@@ -40,7 +77,9 @@ export default function AdminProducts() {
   );
 
   const openAdd = () => {
-    setForm(emptyProduct());
+    const empty = emptyProduct();
+    empty.brand = brandNames[0] || "Olimp";
+    setForm(empty);
     setEditing(null);
     setShowForm(true);
   };
@@ -82,13 +121,16 @@ export default function AdminProducts() {
             <h1 className="text-2xl font-bold text-slate-900">Produits</h1>
             <p className="text-slate-500 mt-1">{products.length} produit{products.length > 1 ? "s" : ""}</p>
           </div>
-          <button
-            onClick={openAdd}
-            className="flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Ajouter
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setShowBrandManager(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-300 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+              <Tag className="w-4 h-4" />
+              Marques
+            </button>
+            <button onClick={openAdd} className="flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+              <Plus className="w-4 h-4" />
+              Ajouter
+            </button>
+          </div>
         </div>
       </motion.div>
 
@@ -234,7 +276,7 @@ export default function AdminProducts() {
                   </Field>
                   <Field label="Marque">
                     <select value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-                      {brands.slice(1).map((b) => <option key={b.id} value={b.name}>{b.name}</option>)}
+                      {brandNames.map((name) => <option key={name} value={name}>{name}</option>)}
                     </select>
                   </Field>
                 </div>
@@ -312,6 +354,33 @@ export default function AdminProducts() {
                 >
                   {editing ? "Enregistrer" : "Ajouter"}
                 </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showBrandManager && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-12 sm:pt-24 px-4" onClick={() => setShowBrandManager(false)}>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-slate-900">Marques</h2>
+                <button onClick={() => setShowBrandManager(false)} className="p-1 rounded-lg hover:bg-slate-100 transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+              </div>
+              <div className="flex gap-2 mb-4">
+                <input placeholder="Nom de la marque" value={newBrandName} onChange={(e) => setNewBrandName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addBrand()} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-900" />
+                <button onClick={addBrand} disabled={!newBrandName.trim()} className="flex items-center gap-2 shrink-0 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-dark disabled:opacity-40 transition-colors"><Plus className="w-4 h-4" /> Ajouter</button>
+              </div>
+              <div className="space-y-1 max-h-64 overflow-y-auto">
+                {settingsBrands.length === 0 ? (
+                  <p className="text-sm text-slate-400 text-center py-8">Aucune marque</p>
+                ) : settingsBrands.map((b, i) => (
+                  <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg border border-slate-200">
+                    <span className="flex-1 text-sm text-slate-900">{b.name}</span>
+                    <button onClick={() => deleteBrand(b.name)} className="p-1 rounded text-red-400 hover:bg-red-50 transition-colors"><X className="w-4 h-4" /></button>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </motion.div>
