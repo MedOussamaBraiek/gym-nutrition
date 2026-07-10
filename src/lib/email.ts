@@ -16,8 +16,8 @@ function getTransporter() {
   });
 }
 
-const from = process.env.FROM_EMAIL || "oussemabraiek@gmail.com";
-const adminEmail = "oussemabraiek@gmail.com";
+const from = process.env.FROM_EMAIL || "hassiba.jabri.business@gmail.com";
+const adminEmail = "hassiba.jabri.business@gmail.com";
 
 const baseStyle = `
   body { margin:0; padding:0; background:#f4f4f4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }

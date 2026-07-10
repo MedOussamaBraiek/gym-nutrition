@@ -10,10 +10,10 @@ export async function seedDB() {
   const hashed = await bcrypt.hash("admin123", 10);
   await UserModel.findOneAndUpdate(
     { role: "admin" },
-    { email: "oussemabraiek@gmail.com", password: hashed, role: "admin" },
+    { email: "hassiba.jabri.business@gmail.com", password: hashed, role: "admin" },
     { upsert: true },
   );
-  console.log("Admin user ensured (oussemabraiek@gmail.com / admin123)");
+  console.log("Admin user ensured (hassiba.jabri.business@gmail.com / admin123)");
 
   for (const { id, ...rest } of products) {
     await ProductModel.findOneAndUpdate(
