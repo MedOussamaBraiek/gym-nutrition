@@ -41,10 +41,10 @@ const siteSettingsSchema = new mongoose.Schema({
     freeThreshold: { type: Number, default: 100 },
   },
   contact: {
-    email: { type: String, default: "contact@tunisianutrition.tn" },
-    phone: { type: String, default: "+216 XX XXX XXX" },
-    whatsapp: { type: String, default: "+216 XX XXX XXX" },
-    address: { type: String, default: "Tunis, Tunisie" },
+    email: { type: String, default: "tunisianutrition@gmail.com" },
+    phone: { type: String, default: "+216 27 804 998" },
+    whatsapp: { type: String, default: "+216 27 804 998" },
+    address: { type: String, default: "Monastir, Tunisie" },
   },
   brands: [{
     name: { type: String, default: "" },

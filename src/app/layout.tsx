@@ -18,6 +18,18 @@ export const metadata: Metadata = {
   description:
     "Votre boutique de confiance en Tunisie pour la créatine, les protéines, et les compléments sportifs. Livraison rapide dans toute la Tunisie.",
   keywords: ["nutrition", "créatine", "protéine", "fitness", "Tunisie", "compléments sportifs"],
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png", sizes: "48x48" }, { url: "/logo.png", type: "image/png", sizes: "32x32" }],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
+  openGraph: {
+    title: "Tunisia Nutrition - Compléments Alimentaires & Fitness",
+    description: "Votre boutique de confiance en Tunisie pour la créatine, les protéines, et les compléments sportifs. Livraison rapide dans toute la Tunisie.",
+    siteName: "Tunisia Nutrition",
+    type: "website",
+    images: [{ url: "/logo.png", width: 1200, height: 630 }],
+  },
 };
 
 export default function RootLayout({

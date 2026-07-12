@@ -173,10 +173,10 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium text-white">Téléphone</p>
                     <a
-                      href="tel:+21612345678"
+                      href="tel:+21627804998"
                       className="text-white/50 hover:text-primary transition-colors"
                     >
-                      +216 12 345 678
+                      +216 27 804 998
                     </a>
                   </div>
                 </div>
@@ -187,10 +187,10 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium text-white">Email</p>
                     <a
-                      href="mailto:hassiba.jabri.business@gmail.com"
+                      href="mailto:tunisianutrition@gmail.com"
                       className="text-white/50 hover:text-primary transition-colors"
                     >
-                      hassiba.jabri.business@gmail.com
+                      tunisianutrition@gmail.com
                     </a>
                   </div>
                 </div>

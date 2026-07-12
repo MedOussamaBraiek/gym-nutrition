@@ -16,8 +16,8 @@ function getTransporter() {
   });
 }
 
-const from = process.env.FROM_EMAIL || "hassiba.jabri.business@gmail.com";
-const adminEmail = "hassiba.jabri.business@gmail.com";
+const from = process.env.FROM_EMAIL || "tunisianutrition@gmail.com";
+const adminEmail = "tunisianutrition@gmail.com";
 
 const baseStyle = `
   body { margin:0; padding:0; background:#f4f4f4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
@@ -235,7 +235,7 @@ export async function sendOrderConfirmation(order: {
     </table>
     <hr class="divider">
     <p style="font-size:14px;color:#555"><strong>🚚 Paiement à la livraison</strong><br>Prépare le montant en espèces. Notre livreur te contactera avant le passage.</p>
-    <p style="font-size:13px;color:#888">Une question ? Réponds à cet email ou appelle-nous au +216 12 345 678.</p>
+    <p style="font-size:13px;color:#888">Une question ? Réponds à cet email ou appelle-nous au +216 27 804 998.</p>
   `,
   );
 }

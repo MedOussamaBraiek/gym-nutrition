@@ -21,7 +21,7 @@ const defaults: SiteSettings = {
   testimonials: { title: "Ce que disent nos clients", items: [] },
   newsletter: { title: "Restez Informé", subtitle: "Soyez les premiers informés" },
   delivery: { fee: 8, freeThreshold: 100 },
-  contact: { email: "contact@tunisianutrition.tn", phone: "+216 XX XXX XXX", whatsapp: "+216 XX XXX XXX", address: "Tunis, Tunisie" },
+  contact: { email: "tunisianutrition@gmail.com", phone: "+216 27 804 998", whatsapp: "+216 27 804 998", address: "Monastir, Tunisie" },
 };
 
 let cache: SiteSettings | null = null;

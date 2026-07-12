@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { Menu, X, ShoppingBag, Dumbbell, ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 
@@ -30,13 +31,21 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-black/90 backdrop-blur-md shadow-lg shadow-black/20" : "bg-black/50 backdrop-blur-sm"
+        scrolled
+          ? "bg-black/90 backdrop-blur-md shadow-lg shadow-black/20"
+          : "bg-black/50 backdrop-blur-sm"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          <Link href="/" className="flex items-center gap-2 group">
-            <Dumbbell className="w-7 h-7 text-primary transition-transform group-hover:scale-110 duration-200" />
+          <Link href="/" className="flex items-center gap-3 group">
+            <Image
+              src="/logo.png"
+              alt="Tunisia Nutrition"
+              width={1000}
+              height={300}
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+            />
             <span className="text-xl font-bold tracking-tight">
               <span className="text-primary">Tunisia</span>{" "}
               <span className="text-white">Nutrition</span>
@@ -54,7 +63,10 @@ export default function Header() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
-            <Link href="/cart" className="relative p-2 text-white/60 hover:text-primary transition-colors">
+            <Link
+              href="/cart"
+              className="relative p-2 text-white/60 hover:text-primary transition-colors"
+            >
               <ShoppingCart className="w-5 h-5" />
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">
@@ -76,7 +88,11 @@ export default function Header() {
             className="md:hidden p-2 text-white/60 hover:text-primary transition-colors"
             aria-label="Menu"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -101,7 +117,11 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link href="/cart" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 text-base font-medium text-white/60 hover:text-primary transition-colors py-2">
+              <Link
+                href="/cart"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 text-base font-medium text-white/60 hover:text-primary transition-colors py-2"
+              >
                 <ShoppingCart className="w-5 h-5" />
                 Panier {itemCount > 0 && `(${itemCount})`}
               </Link>
