@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, X, ChevronDown } from "lucide-react";
+import { Search, X, ChevronDown, RefreshCw } from "lucide-react";
 import { categories, brands as staticBrands, goals } from "@/lib/products";
 import { useProducts } from "@/lib/use-products";
 import ProductCard from "@/components/ui/ProductCard";
@@ -64,7 +64,7 @@ function FilterGroup({ title, items, selected, onChange }: FilterGroupProps) {
 }
 
 function ProductsPageContent() {
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -74,6 +74,8 @@ function ProductsPageContent() {
     const cat = searchParams?.get("category");
     if (cat) {
       setSelectedCategories([normalizeFilter(cat)]);
+    } else {
+      setSelectedCategories([]);
     }
   }, [searchParams]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -128,7 +130,7 @@ function ProductsPageContent() {
         product.price >= priceRange[0] && product.price <= priceRange[1];
       return matchesSearch && matchesCategory && matchesBrand && matchesGoal && matchesPrice;
     });
-  }, [selectedCategories, selectedBrands, selectedGoals, priceRange, searchQuery]);
+  }, [selectedCategories, selectedBrands, selectedGoals, priceRange, searchQuery, products]);
 
   const hasActiveFilters =
     selectedCategories.length > 0 ||
@@ -281,7 +283,11 @@ function ProductsPageContent() {
               </div>
             )}
 
-            {filtered.length === 0 ? (
+            {loading ? (
+              <div className="flex items-center justify-center py-20 bg-dark-lighter rounded-2xl border border-white/5">
+                <RefreshCw className="w-8 h-8 text-white/20 animate-spin" />
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-20 bg-dark-lighter rounded-2xl border border-white/5">
                 <p className="text-white/50 text-lg">Aucun produit trouvé.</p>
                 <p className="text-white/30 text-sm mt-2">
