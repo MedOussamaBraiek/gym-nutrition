@@ -59,9 +59,13 @@ export default function AdminDashboard() {
               transition={{ delay: i * 0.03 }}
               className="px-5 py-3 flex items-center justify-between"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
-                  <Package className="w-4 h-4 text-slate-400" />
+                <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center overflow-hidden">
+                  {p.image ? (
+                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <Package className="w-4 h-4 text-slate-400" />
+                  )}
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-900">{p.name}</p>
